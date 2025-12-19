@@ -1,36 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { ChatbotProvider } from '@site/src/contexts/ChatbotContext';
-import FloatingChatIcon from '@site/src/components/Chatbot/FloatingChatIcon';
-import ChatbotInterface from '@site/src/components/Chatbot/ChatbotInterface';
+import React from 'react';
+import {LanguageProvider} from '@site/src/contexts/LanguageContext';
 
-// Global state provider component
-const Root = ({ children }) => {
-  const [showChatbot, setShowChatbot] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+// Default fallback wrapper if no providers are needed
+const DefaultRoot = ({children}) => <>{children}</>;
 
-  useEffect(() => {
-    // Set isClient to true after component mounts on client
-    setIsClient(true);
-  }, []);
-
-  const toggleChatbot = () => {
-    setShowChatbot(!showChatbot);
-  };
-
+export default function Root({children}) {
+  // Wrap children with LanguageProvider to provide context to all components
   return (
-    <ChatbotProvider>
+    <LanguageProvider>
       {children}
-      {isClient && (
-        <>
-          <FloatingChatIcon onClick={toggleChatbot} isOpen={showChatbot} />
-          <ChatbotInterface
-            isVisible={showChatbot}
-            onClose={() => setShowChatbot(false)}
-          />
-        </>
-      )}
-    </ChatbotProvider>
+    </LanguageProvider>
   );
-};
-
-export default Root;
+}
